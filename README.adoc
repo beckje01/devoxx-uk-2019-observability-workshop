@@ -7,7 +7,7 @@ A hands on playground for learning observability basics in a hands on fashion.
 
 Please have docker installed and working and run the following to get all the infrastructure up and running before getting to the conference.
 
-Any questions or things not working reach out on twitter to @beckje01
+Any questions or things not working reach out on twitter to https://twitter.com/beckje01[@beckje01]
 
 [source,bash]
 ----
