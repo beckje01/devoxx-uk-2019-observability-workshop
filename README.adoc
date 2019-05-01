@@ -1,0 +1,15 @@
+= Devoxx UK 2019 Observability Workshop
+
+A hands on playground for learning observability basics in a hands on fashion.
+
+
+== Prework
+
+Please have docker installed and working and run the following to get all the infrastructure up and running before getting to the conference.
+
+Any questions or things not working reach out on twitter to @beckje01
+
+[source,bash]
+----
+{project}/infra/$ docker-compose up
+----
