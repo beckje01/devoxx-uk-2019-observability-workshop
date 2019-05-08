@@ -1,0 +1,7 @@
+= Requests
+
+A set of requests to run traffic through the system.
+
+Each service has a file here, with the edge being the routing layer.
+
+These files are usable with https://marketplace.visualstudio.com/items?itemName=humao.rest-client[Code Rest Client], otherwise use your favorite rest tool.

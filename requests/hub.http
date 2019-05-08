@@ -1,0 +1,16 @@
+### Create Hub
+POST http://127.0.0.1:5050/hubs
+content-type: application/json
+
+{
+  "name": "Jeff's Hub",
+  "hardwareType": "secretHub"
+}
+
+### List all the Hubs
+GET http://127.0.0.1:5050/hubs
+
+### Get A Hub
+@hubId = 1343
+
+GET http://127.0.0.1:5050/hubs/{{hubId}}

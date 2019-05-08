@@ -1,0 +1,13 @@
+.gradle/
+.idea/
+.DS_Store
+classes/
+*.iml
+/build
+build/
+*.ipr
+*.iws
+out/
+.gradletasknamecache
+.asscache
+.java-version

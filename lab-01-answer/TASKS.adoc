@@ -1,0 +1,42 @@
+== Get Logs to One Place
+
+With MicroServices it is a must to have a single place to go through logs for everything at once. For this workshop we will be using the ELK stack, hosted locally.
+
+The work will be to setup logging targets of logstash for all the microservices.
+
+== Dynamic Log Filtering
+
+Now that we have all the logs in one place, we quickly start having too many logs. Next know we want some debug level logging but not all of it. Using Turbo Filters in logback is a great place to start.  DynamicThresholdFilter will allow the most flexibility.
+
+Checkout the logback https://logback.qos.ch/manual/filters.html[filter docs].
+
+== Formatting
+
+* How do you know where logs are coming in from?
+* Do you always want plain text unstructured messages?
+* You want to start adding known field for all the apps as well as structuring the messages you send in.
+
+== Correlation IDs
+
+Also known as logging IDs, these are passed between systems and used to tie together cross system calls. Collecting them and depending on MCD is a great step into observability. This is also a way to retrofit old code bases with limited impact.
+
+Add correlation IDs as requests enter and exit services, the common module provides a logging context object that can be used to unify naming and pass these around.
+
+
+= Final State
+
+By the end of this lab, you should have logs all going to Kibania, which indicate which app they are from as well as be dynamically leveled. To make it easy to see the correlation id header I suggest you add them to responses as well.
+
+
+== Extra Setup
+IF you are using `user-grails`
+
+http://localhost:8080/h2-console
+
+Connect to:
+jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+
+[source,sql]
+----
+CREATE TABLE user(id  VARCHAR(255) PRIMARY KEY, username VARCHAR(255), version int);
+----

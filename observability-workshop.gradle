@@ -1,0 +1,300 @@
+buildscript {
+	repositories {
+		jcenter()
+		maven { url "https://repo.grails.org/grails/core" }
+		maven { url 'https://repo.spring.io/snapshot' }
+	}
+
+	dependencies {
+		classpath "io.ratpack:ratpack-gradle:1.6.0"
+		classpath "com.github.jengelman.gradle.plugins:shadow:4.0.2"
+		classpath "org.grails:grails-gradle-plugin:$grailsVersion"
+		classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.14.1"
+		classpath "org.grails.plugins:hibernate5:${gormVersion - ".RELEASE"}"
+		classpath "io.spring.gradle:dependency-management-plugin:1.0.5.RELEASE"
+		classpath "net.ltgt.gradle:gradle-apt-plugin:0.15"
+		classpath "org.springframework.boot:spring-boot-gradle-plugin:2.1.4.RELEASE"
+	}
+}
+
+allprojects {
+	apply plugin: "idea"
+	apply plugin: "eclipse"
+
+	task hello {
+		doLast { task ->
+			println "I'm $task.project.name"
+		}
+	}
+}
+
+apply plugin: "org.gradle.presentation.asciidoctor"
+
+presentation {
+    githubUserName.set("beckje01")
+    githubRepoName.set("devoxx-uk-2019-observability-workshop")
+	dependencies {
+		asciidoctor("org.asciidoctor:asciidoctorj-diagram:1.5.16")
+		asciidoctor("org.asciidoctor:asciidoctorj-pdf:1.5.0-alpha.15")
+	}
+}
+
+subprojects {
+	repositories {
+		jcenter()
+	}
+
+}
+
+//Configure Ratpack Subprojects
+configure(subprojects.findAll { it.name =~ ".*ratpack" }) {
+	buildscript {
+		repositories {
+			jcenter()
+		}
+		dependencies {
+			classpath "io.ratpack:ratpack-gradle:1.6.0"
+			classpath "com.github.jengelman.gradle.plugins:shadow:4.0.1"
+		}
+	}
+
+	apply plugin: "io.ratpack.ratpack-groovy"
+	apply plugin: "com.github.johnrengelman.shadow"
+
+	dependencies {
+
+		//Add hikari and h2
+		compile ratpack.dependency("h2")
+		compile ratpack.dependency("hikari")
+		compile ratpack.dependency("dropwizard-metrics")
+
+
+		//TODO FIXME
+		compile "com.github.hyleung:ratpack-zipkin:2.3.1"
+		compile "smartthings.ratpack.brave:ratpack-brave-common:0.3.0"
+		compile 'io.zipkin.reporter2:zipkin-sender-okhttp3:2.7.7'
+		compile 'io.zipkin.reporter:zipkin-reporter:1.1.2'
+		compile 'io.zipkin.java:zipkin:2.5.0'
+
+		//Logging
+		compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+
+
+		// runtime 'org.slf4j:slf4j-simple:1.7.25'
+
+		testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
+
+		def localCommon = ":" + project.parent.name + ":common"
+		compile project(localCommon)
+	}
+}
+
+//Configure Micronaut Subprojects
+configure(subprojects.findAll { it.name =~ ".*micronaut" }) {
+
+
+	apply plugin: "io.spring.dependency-management"
+	apply plugin: "com.github.johnrengelman.shadow"
+	apply plugin: "application"
+	apply plugin: "java"
+	apply plugin: "net.ltgt.apt-eclipse"
+	apply plugin: "net.ltgt.apt-idea"
+	apply plugin: "groovy"
+
+	dependencyManagement {
+		imports {
+			mavenBom 'io.micronaut:micronaut-bom:1.0.5'
+		}
+	}
+
+	dependencies {
+		annotationProcessor "io.micronaut:micronaut-inject-java"
+		compile "io.micronaut:micronaut-http-client"
+		compile "io.micronaut:micronaut-http-server-netty"
+		compile "io.micronaut:micronaut-inject"
+		compile "io.micronaut:micronaut-runtime"
+		compileOnly "io.micronaut:micronaut-inject-java"
+
+		def localCommon = ":" + project.parent.name + ":common"
+		compile project(localCommon)
+
+		compile "ch.qos.logback:logback-classic:1.2.3"
+
+
+		runtime "io.zipkin.brave:brave-instrumentation-http:4.19.0"
+		runtime "io.zipkin.reporter2:zipkin-reporter:2.5.0"
+		testCompile("org.spockframework:spock-core:1.1-groovy-2.4") {
+			exclude group: "org.codehaus.groovy", module: "groovy-all"
+		}
+		testCompile "io.micronaut:inject-groovy"
+		testCompile "junit:junit:4.12"
+		testCompile "io.micronaut:inject-java"
+	}
+
+	shadowJar {
+		mergeServiceFiles()
+	}
+
+	run.jvmArgs('-noverify', '-XX:TieredStopAtLevel=1')
+
+	mainClassName = "zipkinex.Application"
+	compileJava.options.compilerArgs += '-parameters'
+	compileTestJava.options.compilerArgs += '-parameters'
+
+}
+
+//Configure Grails Subprojects
+configure(subprojects.findAll { it.name =~ ".*grails" }) {
+	buildscript {
+		repositories {
+			mavenLocal()
+			maven { url "https://repo.grails.org/grails/core" }
+		}
+		dependencies {
+
+		}
+	}
+
+	apply plugin: "io.spring.dependency-management"
+	apply plugin: "war"
+	apply plugin: "org.grails.grails-web"
+	apply plugin: "org.grails.grails-gsp"
+	apply plugin: "asset-pipeline"
+
+	repositories {
+		maven { url "https://repo.grails.org/grails/core" }
+		maven {
+			url 'https://repo.spring.io/libs-milestone'
+		}
+		maven { url "https://oss.jfrog.org/oss-snapshot-local/" }
+
+	}
+
+	dependencyManagement {
+		imports {
+			mavenBom "org.springframework.cloud:spring-cloud-sleuth:2.1.1.RELEASE"
+		}
+	}
+
+	dependencies {
+		compile "org.springframework.boot:spring-boot-starter-logging"
+		compile "org.springframework.boot:spring-boot-autoconfigure"
+		compile "org.grails:grails-core"
+		compile "org.springframework.boot:spring-boot-starter-actuator"
+		compile "org.springframework.boot:spring-boot-starter-tomcat"
+
+
+		compile "org.grails:grails-dependencies"
+		compile "org.grails:grails-web-boot"
+		compile "org.grails.plugins:scaffolding"
+		compile "org.grails.plugins:hibernate5"
+		compile "org.hibernate:hibernate-core:5.4.0.Final"
+		compile "org.hibernate:hibernate-ehcache:5.4.0.Final"
+		console "org.grails:grails-console"
+		compile "org.grails.plugins:views-json:2.0.0.RC1"
+
+		def localCommon = ":" + project.parent.name + ":common"
+		compile project(localCommon)
+
+		compile 'org.springframework.cloud:spring-cloud-starter-zipkin'
+
+
+		profile "org.grails.profiles:web"
+		profile "org.grails.profiles:rest-api"
+		runtime "com.bertramlabs.plugins:asset-pipeline-grails:2.14.1"
+		runtime "com.h2database:h2:1.4.196"
+		testCompile "org.grails:grails-plugin-testing"
+		testCompile "org.grails.plugins:geb"
+		testRuntime "org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1"
+		testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
+	}
+
+	bootRun {
+		jvmArgs('-Dspring.output.ansi.enabled=always')
+		sourceResources sourceSets.main
+	}
+
+	task run(type: org.springframework.boot.gradle.tasks.run.BootRun, dependsOn: 'build') {
+		group = 'Application'
+
+		jvmArgs('-Dspring.output.ansi.enabled=always')
+		sourceResources sourceSets.main
+
+
+		doFirst() {
+			main = bootJar.mainClassName
+			classpath = sourceSets.main.runtimeClasspath
+		}
+	}
+
+
+	assets {
+		minifyJs = true
+		minifyCss = true
+	}
+
+}
+
+//Configure Common Subprojects
+configure(subprojects.findAll { it.name == "common" }) {
+	apply plugin: 'java'
+}
+
+//Configure Boot Subprojects
+configure(subprojects.findAll {it.name =~ ".*boot" }) {
+
+	buildscript {
+		repositories {
+			maven { url 'https://repo.spring.io/snapshot' }
+			maven { url 'https://repo.spring.io/milestone' }
+			jcenter()
+		}
+		dependencies {
+			classpath "org.springframework.boot:spring-boot-gradle-plugin:2.2.0.M2"
+		}
+	}
+
+	apply plugin: "org.springframework.boot"
+	apply plugin: "java"
+	apply plugin: 'io.spring.dependency-management'
+
+	repositories {
+		mavenCentral()
+		maven { url 'https://repo.spring.io/snapshot' }
+		maven { url 'https://repo.spring.io/milestone' }
+	}
+
+	dependencies {
+		implementation "org.springframework.boot:spring-boot-starter"
+		implementation "org.springframework.boot:spring-boot-starter-web"
+		implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+		testImplementation "org.springframework.boot:spring-boot-starter-test"
+
+		// https://mvnrepository.com/artifact/org.projectlombok/lombok
+		compile group: 'org.projectlombok', name: 'lombok', version: '1.18.8'
+		annotationProcessor 'org.projectlombok:lombok:1.18.8'
+		compile("com.h2database:h2")
+
+		def localCommon = ":" + project.parent.name + ":common"
+		compile project(localCommon)
+
+	}
+
+	task run(type: org.springframework.boot.gradle.tasks.run.BootRun, dependsOn: 'build') {
+		group = 'Application'
+
+		doFirst() {
+			main = bootJar.mainClassName
+			classpath = sourceSets.main.runtimeClasspath
+		}
+	}
+
+}
+
+idea {
+	project {
+		jdkName "1.8"
+		languageLevel "1.8"
+		vcs = 'Git'
+	}
+}

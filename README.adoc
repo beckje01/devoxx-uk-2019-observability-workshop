@@ -13,3 +13,19 @@ Any questions or things not working reach out on twitter to https://twitter.com/
 ----
 {project}/infra/$ docker-compose up
 ----
+
+== Notes
+
+The labs all work best if you move into that folder or the subprojects folder to run gradle commands.
+
+[source,bash]
+----
+cd {project}/lab-01/edge-ratpack/
+gradle run
+----
+
+== Links
+
+* links.html[Link Page for Local Services]
+* Each Lab has a TASKS.adoc file
+* lab.pdf[Presentation PDF]

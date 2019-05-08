@@ -1,0 +1,36 @@
+
+== Docker
+
+You need to setup your IP so prometheus running in docker can see your local ports.
+
+`ip addr`
+
+Look for docker0 then use that as the ip in the config.
+
+
+== Metrics
+Metrics are the final key piece of observability. There are many new emerging ways of doing metrics, that are all great.
+
+Dropwizard metrics are old and somewhat less advanced at this point but they are well supported and have an output for prometheus which is setup for this workshop.
+Micrometer is already available in micronaut, but we need a custom endpoint to make it available.
+
+
+== Prometheus Config
+
+Edit the prometheus configuration in the infra directory to scrap all the services.
+
+== Custom Metrics
+
+Add some new custom metrics to the apps that you can explore in http://localhost:3000[Grafana]
+
+== Grails Extra Setup
+
+http://localhost:8080/h2-console
+
+Connect to:
+jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+
+[source,sql]
+----
+CREATE TABLE user(id  VARCHAR(255) PRIMARY KEY, username VARCHAR(255), version int);
+----

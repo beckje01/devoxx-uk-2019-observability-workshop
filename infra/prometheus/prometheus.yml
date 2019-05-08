@@ -31,3 +31,8 @@ scrape_configs:
     metrics_path: '/admin/prometheus'
     static_configs:
       - targets: ['192.168.11.5:8081']
+  - job_name: 'user'
+    scrape_interval: 5s
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['192.168.11.5:8080']

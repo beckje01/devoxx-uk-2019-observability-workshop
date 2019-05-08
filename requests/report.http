@@ -1,0 +1,10 @@
+### Hello World of Report App
+GET http://127.0.0.1:8081/hello
+
+### Report Stats
+GET http://127.0.0.1:8081/reports
+
+### Get Report of Hub Count
+
+GET http://127.0.0.1:8081/reports/hubCount
+

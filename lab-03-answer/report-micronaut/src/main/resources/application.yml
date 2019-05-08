@@ -1,0 +1,29 @@
+---
+micronaut:
+    application:
+        name: report
+
+#Uncomment to set server port
+    server:
+        port: 8081
+
+---
+micronaut:
+  metrics:
+    enabled: true
+    sensitive: true
+    export:
+      prometheus:
+        enabled: true
+        step: PT1M
+        descriptions: true
+
+---
+tracing:
+  zipkin:
+    enabled: true
+    traceId128Bit: true
+    http:
+      url: http://localhost:9411
+      sampler:
+        probability: 1

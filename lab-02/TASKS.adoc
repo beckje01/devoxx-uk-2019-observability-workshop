@@ -1,0 +1,27 @@
+== Extra Setup
+
+http://localhost:8080/h2-console
+
+Connect to:
+jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+
+[source,sql]
+----
+CREATE TABLE user(id  VARCHAR(255) PRIMARY KEY, username VARCHAR(255), version int);
+----
+
+== Zipkin Support For Services
+We want to start adding Zipkin tracing for all our services to better deal with debugging. You should see all of your services in the service list in zipkin.
+
+* _Ratpack_- https://github.com/openzipkin-contrib/brave-ratpack[brave-ratpack]
+* _Micronaut_ - https://guides.micronaut.io/micronaut-microservices-distributed-tracing-zipkin/guide/index.html[Micronaut Tracing Support]
+* _Spring Boot_ - https://spring.io/projects/spring-cloud-sleuth[Sleuth]
+
+== DataStore Tracing
+We can also wrap our datastores with tracing to really find hidden issues. For this project the https://github.com/p6spy/p6spy[P6Spy] is a good start
+
+== Debug Issues
+There are some routing issues embedded in the apps that should show themselves very easily with tracing. You should be able to fix them.
+
+== Debug slow transactions
+There is a slow transaction hiding which should show nicely on zipkin; after you find it fix it.

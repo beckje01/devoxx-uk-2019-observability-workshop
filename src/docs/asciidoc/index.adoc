@@ -1,0 +1,198 @@
+:revnumber: {project-version}
+:example-caption!:
+ifndef::imagesdir[:imagesdir: images]
+ifndef::sourcedir[:sourcedir: ../java]
+:navigation:
+:menu:
+:status:
+:title-slide-background-image: devoxx-splash.png
+:title-slide-transition: zoom
+:title-slide-transition-speed: fast
+:icons: font
+
+= : Observability Lab
+
+[.notes]
+--
+3 Hour workshop
+--
+
+
+
+== Agenda
+
+* Intro
+* Lab01 - Logging
+* Tracing Terminology
+* Lab02 - Tracing
+* Lab03 - Metrics
+* Lab04 - Observability Bugs
+
+include::chapters/whoami.adoc[]
+
+
+== How this Workshop is Setup
+
+Labs are in a state where they will compile but not all are 100% correct. The answers are in the corresponding modules.
+
+=== System Overview
+
+[plantuml%interactive, _images/diagramoverdev, svg, height=350, width=400]
+----
+@startuml
+  rectangle edge as "Edge"
+  rectangle hub as "Hub"
+	rectangle user as "User"
+	rectangle report as "Report"
+	database hubdb as "Hub\nDatabase"
+	database userdb as "User\nDatabase"
+
+  user -down-> userdb
+  hub -down-> hubdb
+
+  edge -down-> report
+  edge -down-> hub
+	edge -down-> user
+
+	report -> hub
+@enduml
+----
+
+=== Infra
+
+All the shared infrastructure for observability is in this directory you can run it with docker-compose.
+
+=== Requests
+
+A handful of simple requests that can exercise the system easily are in this directory. Each service has a file.
+
+=== Services
+
+Each service is named for its role then a dash with it's framework. You only need to run one of each role.
+
+
+=== Task List
+
+There is a high level task list in each lab directory, that has a rough order on the things to explore. It also has general pointers of where to get started.
+
+=== Wrap Up
+
+We will do a wrap up discussion after each lab talking about more complex real world applications of the topics.
+
+== What is Observability
+
+The property of systems that allows operators to clearly understand the state of the system.
+
+=== Show and Tell
+
+== Lab 01 - Logging
+
+=== Commands
+
+From infra dir:
+```bash
+docker-compose up
+```
+
+From each project directory
+```
+./gradlew run
+```
+
+=== Lab 01 - Tasks
+
+. Get Logs to One Place
+. Dynamic Log Filtering
+. Log Formatting
+. Correlation IDs
+
+*GOAL* All Logs Available in Kibania
+
+=== Lab 01 - Wrap Up
+
+* Correlation IDs are lightweight, good for small retrofit
+* Dynamic Logging is for cost savings
+* Formatting Matters
+
+== Tracing Terminology
+
+
+=== What is Distributed Tracing
+
+Distributed tracing systems collect end-to-end latency graphs
+(traces) in near real-time.
+
+* https://zipkin.io/[Zipkin]
+* https://github.com/jaegertracing/jaeger[Jaeger]
+* https://research.google.com/pubs/pub36356.html[Dapper]
+
+=== Terminology Lesson
+
+* **Span** - An operation that took place.
+* **Event** - Something that occurs in a span.
+* **Tag** - Key value pair on a span.
+
+=== Terminology Lesson
+
+* **Trace** - End-to-end latency graph, made up of spans.
+* **Tracer** - Library that records spans and passes context
+* **Instrumentation** - Use of a tracer to record tasks.
+* **Sample %** - How often to record a trace.
+
+== Lab 02 -- Tracing
+
+Same apps just add tracing.
+
+=== Lab 02 - Tasks
+
+. Zipkin Support For Services
+. DataStore Tracing
+. Debug Issues
+. Debug Slow Transactions
+
+=== Lab 02 -- Wrap Up
+
+* Customization is Key
+* Service Mesh
+* When to use annotations?
+* When to use tags?
+
+== Lab 03 -- Metrics
+
+=== Lab 03 - Tasks
+
+. Expose Metrics for Prometheus
+. Scrape All the Metrics
+. Custom Metrics
+
+=== Lab 03 -- Discussion
+
+* What metrics do you collect today?
+* How do metrics lie to you?
+* How do your metrics tie to users?
+
+== Lab 04 -- Observability Bugs
+
+=== Lab 04 -- Tasks
+
+. Odd Behaviors
+
+=== Lab 04 -- Error Stories
+
+* Traces with > 10k spans
+* Error rates thrown off by service reporting the wrong name.
+* Lost traces
+* Broken Traces
+* Fixed correlation IDs
+
+== Observability Discussion
+
+* Data is step 1
+* Actionable data is step 2
+* Pair all the tools for maximum effect.
+
+== Questions
+
+== We are Hiring
+
+http://bit.ly/SmartThingsJobs

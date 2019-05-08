@@ -1,0 +1,28 @@
+def labs = 4
+
+def services = ['', ':hub-ratpack', ':edge-ratpack', ':user-grails', ':report-micronaut', ':common', ':user-boot']
+
+def toInclude = ((1..labs).collect {
+	"$it".padLeft(2, '0')
+}.collectMany { i ->
+	def prjs = []
+	services.each {
+		//, "lab-$i-answer"
+		prjs += ["lab-$i", "lab-$i-answer"]*.concat(it)
+	}
+	return prjs
+} as String[])
+
+include toInclude
+
+rootProject.name = 'observability-workshop'
+
+
+def setBuildFile(project) {
+	project.buildFileName = "${project.name}.gradle"
+	project.children.each this.&setBuildFile
+}
+
+setBuildFile rootProject
+
+

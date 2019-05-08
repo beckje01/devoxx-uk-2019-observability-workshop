@@ -1,0 +1,5 @@
+profile: service
+defaultPackage: zipkinex
+---
+testFramework: spock
+sourceLanguage: java

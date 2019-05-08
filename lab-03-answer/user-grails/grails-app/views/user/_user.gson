@@ -1,0 +1,9 @@
+import workshop.User
+
+model {
+	User user
+}
+
+json {
+	id user.id
+}

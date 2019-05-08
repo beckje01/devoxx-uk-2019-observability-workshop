@@ -1,0 +1,10 @@
+server:
+  port: 8080
+
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:userdev;INIT=CREATE SCHEMA IF NOT EXISTS userdev
+  jpa:
+    hibernate:
+      ddl-auto: update

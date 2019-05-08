@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>time=%d{HH:mm:ss.SSS}, loggingId=%X{loggingId}, level=%-5level, logger=%logger{36}, message=%msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="stash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+		<destination>127.0.0.1:4560</destination>
+
+		<!-- encoder is required -->
+		<encoder class="net.logstash.logback.encoder.LogstashEncoder">
+			<includeMdcKeyName>loggingId</includeMdcKeyName>
+			<customFields>{"app":"hub"}</customFields>
+		</encoder>
+	</appender>
+
+	<root level="DEBUG">
+		<appender-ref ref="stash"/>
+		<appender-ref ref="STDOUT"/>
+	</root>
+
+</configuration>

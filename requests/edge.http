@@ -1,0 +1,23 @@
+### Create Hub
+POST http://127.0.0.1:5051/hubs
+content-type: application/json
+
+{
+  "name": "Jeff's Hub",
+  "hardwareType": "secretHub"
+}
+
+### Create User
+
+POST http://127.0.0.1:5051/users
+content-type: application/json
+
+{
+    "username": "beckje01"
+}
+
+### List all the users
+GET http://127.0.0.1:5051/users
+
+### List all the Hubs
+GET http://127.0.0.1:5051/hubs

@@ -1,0 +1,12 @@
+== What is SmartThings?
+
+=== SmartThings Purpose
+
+stuff about st
+
+
+=== Connect All Your Devices
+
+* Hub Connected
+* Cloud to Cloud 
+* Device to Cloud 

@@ -1,0 +1,8 @@
+---
+micronaut:
+    application:
+        name: report
+
+#Uncomment to set server port
+    server:
+        port: 8081

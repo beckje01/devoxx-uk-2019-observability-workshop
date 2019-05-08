@@ -1,0 +1,17 @@
+== Odd Behaviors
+
+There are a number of odd things happening in this lab, check your observability and look for patterns.
+
+
+
+== Grails Extra Setup
+
+http://localhost:8080/h2-console
+
+Connect to:
+jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+
+[source,sql]
+----
+CREATE TABLE user(id  VARCHAR(255) PRIMARY KEY, username VARCHAR(255), version int);
+----
