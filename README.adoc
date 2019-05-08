@@ -28,4 +28,4 @@ gradle run
 
 * links.html[Link Page for Local Services]
 * Each Lab has a TASKS.adoc file
-* lab.pdf[Presentation PDF]
+* https://github.com/beckje01/devoxx-uk-2019-observability-workshop/blob/master/lab.pdf[Presentation PDF]
