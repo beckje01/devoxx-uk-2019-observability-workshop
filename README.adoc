@@ -14,6 +14,13 @@ Any questions or things not working reach out on twitter to https://twitter.com/
 {project}/infra/$ docker-compose up
 ----
 
+== FIX for Log Index
+
+[source,bash]
+----
+curl -XPOST -D- 'http://127.0.0.1:5601/api/saved_objects/index-pattern' -H 'Content-Type: application/json' -H 'kbn-version: 6.6.1' -d '{"attributes":{"title":"logstash-*","timeFieldName":"@timestamp"}}'
+----
+
 == Notes
 
 The labs all work best if you move into that folder or the subprojects folder to run gradle commands.
