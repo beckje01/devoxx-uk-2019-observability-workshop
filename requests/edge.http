@@ -13,7 +13,7 @@ POST http://127.0.0.1:5051/users
 content-type: application/json
 
 {
-    "username": "beckje01"
+    "username": "other"
 }
 
 ### List all the users

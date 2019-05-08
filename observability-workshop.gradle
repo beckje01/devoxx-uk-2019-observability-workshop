@@ -76,6 +76,9 @@ configure(subprojects.findAll { it.name =~ ".*ratpack" }) {
 		compile 'io.zipkin.reporter:zipkin-reporter:1.1.2'
 		compile 'io.zipkin.java:zipkin:2.5.0'
 
+		//groovy
+		compile "org.codehaus.groovy:groovy-all:2.5.6"
+
 		//Logging
 		compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
 
